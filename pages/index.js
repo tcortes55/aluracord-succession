@@ -33,6 +33,7 @@ function Title(props) {
 export default function PaginaInicial() {
     const [username, setUsername] = useState('tcortes55');
     const routing = useRouter();
+    const userApiUrl = 'https://api.github.com/users/'
   
     return (
       <>
@@ -82,6 +83,9 @@ export default function PaginaInicial() {
                 value={username}
                 onChange={function(e) {
                   setUsername(e.target.value);
+                  fetch(userApiUrl + e.target.value).then((resp) => resp.json()).then(function(data) {
+                    console.log(data.name);
+                  })
                 }}
                 fullWidth
                 textFieldColors={{
