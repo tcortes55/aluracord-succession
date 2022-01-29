@@ -2,6 +2,7 @@ import { Box, Button, Text, TextField, Image } from '@skynexui/components'
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import appConfig from '../config.json';
+import constants from '../constants';
 
 function Title(props) {
     const Tag = props.tag || 'h1';
@@ -41,7 +42,7 @@ export default function PaginaInicial() {
           styleSheet={{
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             backgroundColor: appConfig.theme.colors.neutrals[200],
-            backgroundImage: 'url(https://media.architecturaldigest.com/photos/5b5a382e2acdbe14ff211b0c/master/w_2245,h_1497,c_limit/SUC_104_12042017_PK_0506.jpg)',
+            backgroundImage: `url(${constants.backgroundImageUrl})`,
             backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'multiply',
           }}
         >
