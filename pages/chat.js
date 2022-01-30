@@ -7,6 +7,16 @@ export default function ChatPage() {
     const [message, setMessage] = useState('');
     const [messageList, setMessageList] = useState([]);
 
+    function handleNewMessage(messageText) {
+        const newMessage = {
+            id: messageList.length,
+            from: 'Tarcisio',
+            text: messageText
+        }
+        setMessageList([newMessage, ...messageList]);
+        setMessage('');
+    }
+
     return (
         <Box
             styleSheet={{
@@ -32,7 +42,7 @@ export default function ChatPage() {
                 }}
             >
                 <Header />
-                {message}
+                
                 <Box
                     styleSheet={{
                         position: 'relative',
@@ -46,10 +56,10 @@ export default function ChatPage() {
                     }}
                 >
 
-                    <MessageList mensagens={[]} />
-                    Messages: {messageList.map((item) => {
-                        return <Box>{item}</Box>
-                    })}
+                    <MessageList messages={messageList} />
+                    {/* Messages: {messageList.map((messageItem) => {
+                        return <li key={messageItem.id}>{messageItem.from}: {messageItem.text}</li>
+                    })} */}
 
                     <Box
                         as="form"
@@ -63,13 +73,12 @@ export default function ChatPage() {
                             onChange={(event) => {
                                 let value = event.target.value;
                                 setMessage(value);
-                                console.log(message);
                             }}
                             onKeyPress={(event) => {
                                 if (event.key == 'Enter') {
                                     event.preventDefault();
-                                    setMessageList([...messageList, message]);
-                                    setMessage('');
+
+                                    handleNewMessage(message);
                                 }
                             }}
                             placeholder="Insira sua mensagem aqui..."
@@ -111,7 +120,7 @@ function Header() {
 }
 
 function MessageList(props) {
-    // console.log('MessageList', props);
+    console.log('MessageList', props);
     return (
         <Box
             tag="ul"
@@ -124,52 +133,53 @@ function MessageList(props) {
                 marginBottom: '16px',
             }}
         >
-
-            <Text
-                // key={mensagem.id}
-                tag="li"
-                styleSheet={{
-                    borderRadius: '5px',
-                    padding: '6px',
-                    marginBottom: '12px',
-                    hover: {
-                        backgroundColor: appConfig.theme.colors.neutrals[700],
-                    }
-                }}
-            >
-                <Box
-                    styleSheet={{
-                        marginBottom: '8px',
-                    }}
-                >
-                    <Image
-                        styleSheet={{
-                            width: '20px',
-                            height: '20px',
-                            borderRadius: '50%',
-                            display: 'inline-block',
-                            marginRight: '8px',
-                        }}
-                        src={`https://github.com/tcortes55.png`}
-                    />
-                    <Text tag="strong">
-                        {/* {mensagem.de} */}
-                        Tarcisio
-                    </Text>
+            {props.messages.map((message) => {
+                return (
                     <Text
+                        key={message.id}
+                        tag="li"
                         styleSheet={{
-                            fontSize: '10px',
-                            marginLeft: '8px',
-                            color: appConfig.theme.colors.neutrals[300],
+                            borderRadius: '5px',
+                            padding: '6px',
+                            marginBottom: '12px',
+                            hover: {
+                                backgroundColor: appConfig.theme.colors.neutrals[700],
+                            }
                         }}
-                        tag="span"
                     >
-                        {(new Date().toLocaleDateString())}
+                        <Box
+                            styleSheet={{
+                                marginBottom: '8px',
+                            }}
+                        >
+                            <Image
+                                styleSheet={{
+                                    width: '20px',
+                                    height: '20px',
+                                    borderRadius: '50%',
+                                    display: 'inline-block',
+                                    marginRight: '8px',
+                                }}
+                                src={`https://github.com/tcortes55.png`}
+                            />
+                            <Text tag="strong">
+                                {message.from}
+                            </Text>
+                            <Text
+                                styleSheet={{
+                                    fontSize: '10px',
+                                    marginLeft: '8px',
+                                    color: appConfig.theme.colors.neutrals[300],
+                                }}
+                                tag="span"
+                            >
+                                {(new Date().toLocaleDateString())}
+                            </Text>
+                        </Box>
+                        {message.text}
                     </Text>
-                </Box>
-                {/* {mensagem.texto} */}
-                TextMsg
-            </Text>
+                );
+            })}
         </Box>
     )
 }
