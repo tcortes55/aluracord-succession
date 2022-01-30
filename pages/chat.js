@@ -94,6 +94,13 @@ export default function ChatPage() {
                                 color: appConfig.theme.colors.neutrals[200],
                             }}
                         />
+                        <Button
+                            label='Send'
+                            onClick={(event) => {
+                                event.preventDefault();
+                                handleNewMessage(message);
+                            }}
+                        />
                     </Box>
                 </Box>
             </Box>
