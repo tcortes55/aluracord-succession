@@ -1,19 +1,44 @@
 import { Box, Text, TextField, Image, Button } from '@skynexui/components';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import appConfig from '../config.json';
 import constants from '../constants';
+import { createClient } from '@supabase/supabase-js'
+
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0Mzc2MTEwOSwiZXhwIjoxOTU5MzM3MTA5fQ.y6jryFQ914mTPpsYPTVqQHKt-iCQ-RTHdhnjye5ccc0';
+const SUPABASE_URL = 'https://kyykhercidwjsxjctxyy.supabase.co';
+const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 export default function ChatPage() {
     const [message, setMessage] = useState('');
     const [messageList, setMessageList] = useState([]);
 
+    useEffect(() => {
+        supabaseClient
+            .from('messages')
+            .select('*')
+            .order('id', { ascending: false })
+            .then(({ data }) => {
+                console.log(data);
+                setMessageList(data);
+            });
+    }, []);
+
     function handleNewMessage(messageText) {
         const newMessage = {
-            id: messageList.length,
-            from: 'Tarcisio',
+            from: 'tcortes55',
             text: messageText
         }
-        setMessageList([newMessage, ...messageList]);
+
+        supabaseClient
+            .from('messages')
+            .insert([
+                newMessage
+            ])
+            .then(({ data }) => {
+                console.log('Message created: ' + JSON.stringify(data));
+                setMessageList([data[0], ...messageList]);
+            });
+
         setMessage('');
     }
 
@@ -127,7 +152,6 @@ function Header() {
 }
 
 function MessageList(props) {
-    // console.log('MessageList', props);
     return (
         <Box
             tag="ul"
