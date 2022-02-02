@@ -84,8 +84,10 @@ export default function PaginaInicial() {
                 value={username}
                 onChange={function(e) {
                   setUsername(e.target.value);
-                  fetch(userApiUrl + e.target.value).then((resp) => resp.json()).then(function(data) {
-                    console.log(data.name);
+                  fetch(userApiUrl + e.target.value)
+                  .then(async (resp) => {
+                    const response = await resp.json();
+                    console.log(response);
                   })
                 }}
                 fullWidth
